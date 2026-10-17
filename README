@@ -1,0 +1,48 @@
+# Predicting income level from socio-demographic data
+ 
+Individual assignment, Data Mining & Machine Learning course.
+ 
+## Research question
+ 
+Can we predict whether a person earns more than $50K a year from their socio-demographic characteristics, and which factors matter most?
+ 
+## Data
+ 
+The Adult Income dataset (US census data): 32,561 individuals and 15 variables such as age, education, occupation, marital status, sex, hours worked per week and capital gains. The target `income` was converted to a binary variable (1 if above $50K).
+ 
+The classes are imbalanced: only 24% of individuals earn more than $50K.
+ 
+## Exploratory analysis
+ 
+- Education level (`education.num`) is the numerical variable most correlated with income (0.34), followed by age, hours worked and capital gains
+- About 30% of men earn more than $50K, compared with 11% of women
+- The median age is 44 for high earners and 34 for the others
+- Most people work around 40 hours a week, with a few outliers above 60
+## Models
+ 
+Since the goal is to predict a class rather than a continuous value, I used two supervised classification models:
+ 
+- **Logistic regression**, first with statsmodels to read the coefficients, then with scikit-learn (with class balancing) for prediction
+- **Random forest** (100 trees, maximum depth 10)
+Features: age, education level, capital gains and hours worked (standardised), plus marital status, occupation and sex (one-hot encoded). The data was split 80% training / 20% test.
+ 
+## Results
+ 
+| Model | Accuracy | Precision (>50K) | Recall (>50K) |
+|---|---|---|---|
+| Logistic regression | 80% | 57% | 83% |
+| Random forest | 85% | 80% | 53% |
+ 
+- The logistic regression has a pseudo-R² close to 0.40. Capital gains, being married and managerial or professional occupations increase the probability of a high income.
+- The random forest is more accurate overall but misses almost half of the high earners, mainly because of the class imbalance.
+- According to the random forest, the most important variables are marital status (24%), capital gains (20%) and education level (16%).
+In short, logistic regression is the better tool to understand the role of each variable, while the random forest gives the best overall predictive performance.
+ 
+## Files
+ 
+| File | Content |
+|---|---|
+| `ProjectDM.ipynb` | Python notebook with the full analysis |
+| `adultDB.csv` | Dataset, cleaned beforehand in Excel (separator `;`) |
+ 
+Libraries: pandas, numpy, scikit-learn, statsmodels, matplotlib, seaborn. To run the notebook, change the path in `pd.read_csv()` to point to `adultDB.csv`.
